@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CSS 过渡</title>
+        <style>
+            body{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+                margin: 0;
+                font-family: Arial,sans-serif;
+                background-color: #f4f4f4;
+            }
+            .transition-box{
+                width: 100px; /* 初始宽度为 100像素 */
+            height: 100px; /* 初始高度为 100像素 */
+            background-color: dodgerblue; /* 初始背景颜色为道奇蓝 */
+            color: white; /* 文字颜色为白色 */
+            display: flex; /* 内部元素也使用 Flexbox 布局 */
+            align-items: center; /* 内部元素在交叉轴上居中 */
+            justify-content: center; /* 内部元素在主轴上居中 */
+            text-align: center; /* 文本居中对齐 */
+            border-radius: 5px; /* 边框圆角半径为 5像素 */
+            margin: 20px; /* 外边距为 20像素 */
+
+            transition: all 0.5s ease-in-out 0s;
+            }
+
+            .transition-box:hover{
+                width: 150px;
+                height: 150px;
+                background-color: tomato;
+                transform: rotate(45deg) scale(1.1);
+                border-radius: 50%;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>CSS 过渡(Transitions)</h1>
+        <p>将鼠标放在下方蓝色方块上查看过渡效果</p>
+        <div class="transition-box">
+            放在我上面看看效果
+        </div>
+    </body>
+</html>
