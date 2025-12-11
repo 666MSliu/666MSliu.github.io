@@ -1,49 +1,535 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>CSS 过渡</title>
-        <style>
-            body{
-                display: flex;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人简历</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .resume-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        /* 头部样式 */
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+            color: white;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid rgba(255, 255, 255, 0.2);
+            object-fit: cover;
+            margin-right: 30px;
+        }
+        
+        .header-info h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .header-info .title {
+            font-size: 1.3rem;
+            font-weight: 300;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+        
+        .contact-item i {
+            margin-right: 8px;
+            color: #64b5f6;
+        }
+        
+        /* 主体内容布局 */
+        .resume-body {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            padding: 30px;
+        }
+        
+        /* 左侧栏样式 */
+        .sidebar {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-right: 1px solid #eee;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #64b5f6;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: #64b5f6;
+        }
+        
+        /* 技能条样式 */
+        .skill-item {
+            margin-bottom: 15px;
+        }
+        
+        .skill-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .skill-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .skill-level {
+            height: 100%;
+            background-color: #64b5f6;
+            border-radius: 4px;
+        }
+        
+        /* 语言样式 */
+        .language-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px dotted #ddd;
+        }
+        
+        /* 右侧内容样式 */
+        .main-content {
+            padding: 0 25px;
+        }
+        
+        /* 工作经历和教育经历样式 */
+        .timeline-item {
+            margin-bottom: 25px;
+            padding-left: 20px;
+            border-left: 2px solid #64b5f6;
+            position: relative;
+        }
+        
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #64b5f6;
+            left: -7px;
+            top: 5px;
+        }
+        
+        .timeline-date {
+            background-color: #64b5f6;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        
+        .timeline-title {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .timeline-subtitle {
+            color: #64b5f6;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .timeline-description {
+            color: #666;
+        }
+        
+        /* 兴趣爱好样式 */
+        .hobbies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .hobby-item {
+            background-color: #f0f7ff;
+            padding: 10px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hobby-item i {
+            margin-right: 8px;
+            color: #64b5f6;
+        }
+        
+        /* 打印样式 */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            
+            .resume-container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+            
+            .no-print {
+                display: none;
+            }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .resume-body {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
                 flex-direction: column;
-                align-items: center;
+                text-align: center;
+                padding: 30px 20px;
+            }
+            
+            .profile-img {
+                margin-right: 0;
+                margin-bottom: 20px;
+                width: 120px;
+                height: 120px;
+            }
+            
+            .contact-info {
                 justify-content: center;
-                min-height: 100vh;
-                margin: 0;
-                font-family: Arial,sans-serif;
-                background-color: #f4f4f4;
             }
-            .transition-box{
-                width: 100px; /* 初始宽度为 100像素 */
-            height: 100px; /* 初始高度为 100像素 */
-            background-color: dodgerblue; /* 初始背景颜色为道奇蓝 */
-            color: white; /* 文字颜色为白色 */
-            display: flex; /* 内部元素也使用 Flexbox 布局 */
-            align-items: center; /* 内部元素在交叉轴上居中 */
-            justify-content: center; /* 内部元素在主轴上居中 */
-            text-align: center; /* 文本居中对齐 */
-            border-radius: 5px; /* 边框圆角半径为 5像素 */
-            margin: 20px; /* 外边距为 20像素 */
-
-            transition: all 0.5s ease-in-out 0s;
+            
+            .sidebar {
+                border-right: none;
+                border-bottom: 1px solid #eee;
             }
-
-            .transition-box:hover{
-                width: 150px;
-                height: 150px;
-                background-color: tomato;
-                transform: rotate(45deg) scale(1.1);
-                border-radius: 50%;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>CSS 过渡(Transitions)</h1>
-        <p>将鼠标放在下方蓝色方块上查看过渡效果</p>
-        <div class="transition-box">
-            放在我上面看看效果
+        }
+        
+        /* 按钮样式 */
+        .actions {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn-print {
+            background-color: #64b5f6;
+            color: white;
+        }
+        
+        .btn-download {
+            background-color: #2c3e50;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="resume-container">
+        <!-- 头部信息 -->
+        <div class="header">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="个人照片" class="profile-img">
+            <div class="header-info">
+                <h1>张明</h1>
+                <div class="title">前端开发工程师</div>
+                <p>拥有5年前端开发经验，擅长React、Vue.js等现代前端框架，热爱学习新技术，追求编写优雅、高效的代码。</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>138-0013-8000</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>zhangming@example.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>北京市海淀区</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-github"></i>
+                        <span>github.com/zhangming</span>
+                    </div>
+                </div>
+            </div>
         </div>
-    </body>
+        
+        <!-- 主体内容 -->
+        <div class="resume-body">
+            <!-- 左侧栏 -->
+            <div class="sidebar">
+                <!-- 技能部分 -->
+                <div class="section">
+                    <h3 class="section-title"><i class="fas fa-code"></i> 专业技能</h3>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>HTML/CSS</span>
+                            <span>95%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-level" style="width: 95%;"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>JavaScript</span>
+                            <span>90%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-level" style="width: 90%;"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>React</span>
+                            <span>88%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-level" style="width: 88%;"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Vue.js</span>
+                            <span>85%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-level" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Node.js</span>
+                            <span>75%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-level" style="width: 75%;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 语言能力 -->
+                <div class="section">
+                    <h3 class="section-title"><i class="fas fa-language"></i> 语言能力</h3>
+                    <div class="language-item">
+                        <span>中文 (母语)</span>
+                        <span>流利</span>
+                    </div>
+                    <div class="language-item">
+                        <span>英语</span>
+                        <span>熟练 (CET-6)</span>
+                    </div>
+                    <div class="language-item">
+                        <span>日语</span>
+                        <span>日常交流</span>
+                    </div>
+                </div>
+                
+                <!-- 证书 -->
+                <div class="section">
+                    <h3 class="section-title"><i class="fas fa-award"></i> 证书</h3>
+                    <ul style="padding-left: 20px; color: #555;">
+                        <li style="margin-bottom: 8px;">前端开发工程师认证 (2021)</li>
+                        <li style="margin-bottom: 8px;">高级JavaScript开发证书 (2020)</li>
+                        <li style="margin-bottom: 8px;">PMP项目管理专业人士 (2019)</li>
+                    </ul>
+                </div>
+                
+                <!-- 兴趣爱好 -->
+                <div class="section">
+                    <h3 class="section-title"><i class="fas fa-heart"></i> 兴趣爱好</h3>
+                    <div class="hobbies">
+                        <div class="hobby-item">
+                            <i class="fas fa-book"></i>
+                            <span>阅读</span>
+                        </div>
+                        <div class="hobby-item">
+                            <i class="fas fa-hiking"></i>
+                            <span>徒步</span>
+                        </div>
+                        <div class="hobby-item">
+                            <i class="fas fa-music"></i>
+                            <span>音乐</span>
+                        </div>
+                        <div class="hobby-item">
+                            <i class="fas fa-chess"></i>
+                            <span>围棋</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧内容 -->
+            <div class="main-content">
+                <!-- 工作经历 -->
+                <div class="section">
+                    <h3 class="section-title"><i class="fas fa-briefcase"></i> 工作经历</h3>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2020.03 - 至今</div>
+                        <h4 class="timeline-title">高级前端工程师</h4>
+                        <div class="timeline-subtitle">字节跳动 · 北京</div>
+                        <div class="timeline-description">
+                            <p>负责抖音电商平台前端开发与优化，使用React+TypeScript构建高性能前端应用。</p>
+                            <p>带领5人前端团队，完成多个核心模块重构，提升页面加载速度40%。</p>
+                            <p>设计并实现前端组件库，提高团队开发效率30%。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">2017.07 - 2020.02</div>
+                        <h4 class="timeline-title">前端开发工程师</h4>
+                        <div class="timeline-subtitle">腾讯科技 · 深圳</div>
+                        <div class="timeline-description">
+                            <p>参与微信小程序相关项目开发，负责核心功能模块实现。</p>
+                            <p>优化前端性能，将首屏加载时间从3.2秒降低至1.5秒。</p>
+                            <p>与产品、设计团队紧密合作，实现用户友好的交互体验。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">2015.09 - 2017.06</div>
+                        <h4 class="timeline-title">前端开发实习生</h4>
+                        <div class="timeline-subtitle">百度 · 北京</div>
+                        <div class="timeline-description">
+                            <p>参与百度搜索前端页面维护与优化工作。</p>
+                            <p>学习并应用前端工程化、模块化开发流程。</p>
+                            <p>协助团队完成移动端适配和响应式设计。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 教育背景 -->
+                <div class="section">
+                    <h3 class="section-title"><i class="fas fa-graduation-cap"></i> 教育背景</h3>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2012.09 - 2016.06</div>
+                        <h4 class="timeline-title">计算机科学与技术 学士</h4>
+                        <div class="timeline-subtitle">清华大学 · 北京</div>
+                        <div class="timeline-description">
+                            <p>主修课程：数据结构与算法、操作系统、计算机网络、Web前端技术、软件工程</p>
+                            <p>获得校级优秀毕业生、国家奖学金等荣誉</p>
+                            <p>GPA: 3.8/4.0 (专业排名前5%)</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 项目经验 -->
+                <div class="section">
+                    <h3 class="section-title"><i class="fas fa-project-diagram"></i> 项目经验</h3>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2022.05 - 2022.11</div>
+                        <h4 class="timeline-title">电商数据可视化平台</h4>
+                        <div class="timeline-description">
+                            <p>项目描述：开发一个用于展示电商业务数据的可视化平台，支持多维度数据分析。</p>
+                            <p>技术栈：React + TypeScript + ECharts + Ant Design</p>
+                            <p>项目成果：提高数据分析效率50%，获得部门创新奖。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">2021.03 - 2021.09</div>
+                        <h4 class="timeline-title">企业级组件库开发</h4>
+                        <div class="timeline-description">
+                            <p>项目描述：设计并实现一套企业级UI组件库，统一公司产品设计规范。</p>
+                            <p>技术栈：Vue 3 + Vite + Storybook + Jest</p>
+                            <p>项目成果：覆盖公司80%的前端项目，减少重复开发工作量。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 操作按钮 -->
+        <div class="actions no-print">
+            <button class="btn btn-print" onclick="window.print()">
+                <i class="fas fa-print"></i> 打印简历
+            </button>
+            <button class="btn btn-download" onclick="downloadResume()">
+                <i class="fas fa-download"></i> 下载简历
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // 下载简历功能
+        function downloadResume() {
+            alert("在实际应用中，这里可以连接后端生成PDF简历文件进行下载。\n\n当前为演示版本，您可以使用浏览器的打印功能保存为PDF。");
+        }
+        
+        // 打印提示
+        window.addEventListener('beforeprint', function() {
+            document.querySelector('.actions').classList.add('no-print');
+        });
+    </script>
+</body>
 </html>
