@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人简历</title>
+    <title>刘绍力 - Unity客户端开发工程师简历</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入html2canvas和jsPDF库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -31,7 +34,7 @@
         
         /* 头部样式 */
         .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
             color: white;
             padding: 40px;
             display: flex;
@@ -45,6 +48,12 @@
             border: 5px solid rgba(255, 255, 255, 0.2);
             object-fit: cover;
             margin-right: 30px;
+            background-color: #e3f2fd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #1a237e;
         }
         
         .header-info h1 {
@@ -99,14 +108,14 @@
             color: #2c3e50;
             padding-bottom: 10px;
             margin-bottom: 15px;
-            border-bottom: 2px solid #64b5f6;
+            border-bottom: 2px solid #1a237e;
             display: flex;
             align-items: center;
         }
         
         .section-title i {
             margin-right: 10px;
-            color: #64b5f6;
+            color: #1a237e;
         }
         
         /* 技能条样式 */
@@ -129,7 +138,7 @@
         
         .skill-level {
             height: 100%;
-            background-color: #64b5f6;
+            background-color: #1a237e;
             border-radius: 4px;
         }
         
@@ -151,7 +160,7 @@
         .timeline-item {
             margin-bottom: 25px;
             padding-left: 20px;
-            border-left: 2px solid #64b5f6;
+            border-left: 2px solid #1a237e;
             position: relative;
         }
         
@@ -161,13 +170,13 @@
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background-color: #64b5f6;
+            background-color: #1a237e;
             left: -7px;
             top: 5px;
         }
         
         .timeline-date {
-            background-color: #64b5f6;
+            background-color: #1a237e;
             color: white;
             padding: 3px 10px;
             border-radius: 15px;
@@ -183,13 +192,51 @@
         }
         
         .timeline-subtitle {
-            color: #64b5f6;
+            color: #1a237e;
             font-weight: 600;
             margin-bottom: 8px;
         }
         
         .timeline-description {
             color: #666;
+        }
+        
+        /* 专业技能列表样式 */
+        .skills-list {
+            list-style-type: none;
+        }
+        
+        .skills-list li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .skills-list li:before {
+            content: "•";
+            color: #1a237e;
+            font-size: 1.2rem;
+            position: absolute;
+            left: 0;
+        }
+        
+        /* 项目亮点样式 */
+        .project-highlights {
+            margin-top: 10px;
+        }
+        
+        .highlight-item {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .highlight-item:before {
+            content: "✓";
+            color: #1a237e;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
         }
         
         /* 兴趣爱好样式 */
@@ -209,7 +256,7 @@
         
         .hobby-item i {
             margin-right: 8px;
-            color: #64b5f6;
+            color: #1a237e;
         }
         
         /* 打印样式 */
@@ -279,7 +326,7 @@
         }
         
         .btn-print {
-            background-color: #64b5f6;
+            background-color: #1a237e;
             color: white;
         }
         
@@ -292,33 +339,84 @@
             transform: translateY(-3px);
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
         }
+        
+        /* 加载提示样式 */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #1a237e;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 荣誉奖项样式 */
+        .awards-list {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        
+        .awards-list li {
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .awards-list li:before {
+            content: "🏆";
+            position: absolute;
+            left: -20px;
+        }
     </style>
 </head>
 <body>
     <div class="resume-container">
         <!-- 头部信息 -->
         <div class="header">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="个人照片" class="profile-img">
+            <div class="profile-img">
+                <span>刘</span>
+            </div>
             <div class="header-info">
-                <h1>张明</h1>
-                <div class="title">前端开发工程师</div>
-                <p>拥有5年前端开发经验，擅长React、Vue.js等现代前端框架，热爱学习新技术，追求编写优雅、高效的代码。</p>
+                <h1>刘绍力</h1>
+                <div class="title">Unity客户端开发工程师</div>
+                <p>专注于Unity游戏开发，熟悉C#编程和Unity引擎，具备良好的算法基础和架构设计能力，热爱游戏开发技术。</p>
                 <div class="contact-info">
                     <div class="contact-item">
                         <i class="fas fa-phone"></i>
-                        <span>138-0013-8000</span>
+                        <span>15367256093</span>
                     </div>
                     <div class="contact-item">
                         <i class="fas fa-envelope"></i>
-                        <span>zhangming@example.com</span>
+                        <span>2609482354@qq.com</span>
                     </div>
                     <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>北京市海淀区</span>
+                        <i class="fas fa-birthday-cake"></i>
+                        <span>2004.03.29</span>
                     </div>
                     <div class="contact-item">
-                        <i class="fab fa-github"></i>
-                        <span>github.com/zhangming</span>
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>专科</span>
                     </div>
                 </div>
             </div>
@@ -328,80 +426,39 @@
         <div class="resume-body">
             <!-- 左侧栏 -->
             <div class="sidebar">
-                <!-- 技能部分 -->
+                <!-- 专业技能部分 -->
                 <div class="section">
                     <h3 class="section-title"><i class="fas fa-code"></i> 专业技能</h3>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>HTML/CSS</span>
-                            <span>95%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-level" style="width: 95%;"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>JavaScript</span>
-                            <span>90%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-level" style="width: 90%;"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>React</span>
-                            <span>88%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-level" style="width: 88%;"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>Vue.js</span>
-                            <span>85%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-level" style="width: 85%;"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>Node.js</span>
-                            <span>75%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-level" style="width: 75%;"></div>
-                        </div>
-                    </div>
+                    <ul class="skills-list">
+                        <li>熟练使用C#，能够使用Linq基本语法完成数据处理</li>
+                        <li>熟悉HTTP传输协议及网络编程</li>
+                        <li>熟悉常用数据结构与算法(A*寻路、BFS、DFS等)</li>
+                        <li>熟悉设计模式(单例、工厂、组合模式等)</li>
+                        <li>熟练使用Unity组件(UGUI、Tilemap、Animator等)</li>
+                        <li>熟悉MVC架构思想及模块解耦</li>
+                        <li>熟悉AssetBundle构建、加载、卸载流程</li>
+                        <li>熟悉DOTween、EasySave、行为树插件使用</li>
+                        <li>熟悉对象池创建、使用及内部原理</li>
+                        <li>熟悉FSM状态机及其原理</li>
+                    </ul>
                 </div>
                 
                 <!-- 语言能力 -->
                 <div class="section">
                     <h3 class="section-title"><i class="fas fa-language"></i> 语言能力</h3>
                     <div class="language-item">
-                        <span>中文 (母语)</span>
-                        <span>流利</span>
-                    </div>
-                    <div class="language-item">
-                        <span>英语</span>
-                        <span>熟练 (CET-6)</span>
-                    </div>
-                    <div class="language-item">
-                        <span>日语</span>
-                        <span>日常交流</span>
+                        <span>中文</span>
+                        <span>母语</span>
                     </div>
                 </div>
                 
-                <!-- 证书 -->
+                <!-- 荣誉奖项 -->
                 <div class="section">
-                    <h3 class="section-title"><i class="fas fa-award"></i> 证书</h3>
-                    <ul style="padding-left: 20px; color: #555;">
-                        <li style="margin-bottom: 8px;">前端开发工程师认证 (2021)</li>
-                        <li style="margin-bottom: 8px;">高级JavaScript开发证书 (2020)</li>
-                        <li style="margin-bottom: 8px;">PMP项目管理专业人士 (2019)</li>
+                    <h3 class="section-title"><i class="fas fa-award"></i> 荣誉奖项</h3>
+                    <ul class="awards-list">
+                        <li>2023蓝桥杯全国一等奖</li>
+                        <li>2024年楚怡杯数字化产品设计与开发赛二等奖</li>
+                        <li>2024年获得计算机视觉架构师（中级）证书</li>
                     </ul>
                 </div>
                 
@@ -410,20 +467,16 @@
                     <h3 class="section-title"><i class="fas fa-heart"></i> 兴趣爱好</h3>
                     <div class="hobbies">
                         <div class="hobby-item">
+                            <i class="fas fa-gamepad"></i>
+                            <span>游戏开发</span>
+                        </div>
+                        <div class="hobby-item">
+                            <i class="fas fa-code"></i>
+                            <span>算法研究</span>
+                        </div>
+                        <div class="hobby-item">
                             <i class="fas fa-book"></i>
-                            <span>阅读</span>
-                        </div>
-                        <div class="hobby-item">
-                            <i class="fas fa-hiking"></i>
-                            <span>徒步</span>
-                        </div>
-                        <div class="hobby-item">
-                            <i class="fas fa-music"></i>
-                            <span>音乐</span>
-                        </div>
-                        <div class="hobby-item">
-                            <i class="fas fa-chess"></i>
-                            <span>围棋</span>
+                            <span>技术阅读</span>
                         </div>
                     </div>
                 </div>
@@ -435,35 +488,14 @@
                 <div class="section">
                     <h3 class="section-title"><i class="fas fa-briefcase"></i> 工作经历</h3>
                     <div class="timeline-item">
-                        <div class="timeline-date">2020.03 - 至今</div>
-                        <h4 class="timeline-title">高级前端工程师</h4>
-                        <div class="timeline-subtitle">字节跳动 · 北京</div>
+                        <div class="timeline-date">2025.07 - 2025.10</div>
+                        <h4 class="timeline-title">Unity游戏开发</h4>
+                        <div class="timeline-subtitle">深圳自得树网络科技有限公司</div>
                         <div class="timeline-description">
-                            <p>负责抖音电商平台前端开发与优化，使用React+TypeScript构建高性能前端应用。</p>
-                            <p>带领5人前端团队，完成多个核心模块重构，提升页面加载速度40%。</p>
-                            <p>设计并实现前端组件库，提高团队开发效率30%。</p>
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-date">2017.07 - 2020.02</div>
-                        <h4 class="timeline-title">前端开发工程师</h4>
-                        <div class="timeline-subtitle">腾讯科技 · 深圳</div>
-                        <div class="timeline-description">
-                            <p>参与微信小程序相关项目开发，负责核心功能模块实现。</p>
-                            <p>优化前端性能，将首屏加载时间从3.2秒降低至1.5秒。</p>
-                            <p>与产品、设计团队紧密合作，实现用户友好的交互体验。</p>
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-date">2015.09 - 2017.06</div>
-                        <h4 class="timeline-title">前端开发实习生</h4>
-                        <div class="timeline-subtitle">百度 · 北京</div>
-                        <div class="timeline-description">
-                            <p>参与百度搜索前端页面维护与优化工作。</p>
-                            <p>学习并应用前端工程化、模块化开发流程。</p>
-                            <p>协助团队完成移动端适配和响应式设计。</p>
+                            <p>1. 协助完成Unity项目客户端的开发与维护工作</p>
+                            <p>2. 参与游戏功能的实现与优化，包括UI界面、动画系统等模块</p>
+                            <p>3. 配合团队进行代码调试、Bug修复及性能优化</p>
+                            <p>4. 学习并应用Unity引擎相关技术，参与部分技术方案的讨论与实现</p>
                         </div>
                     </div>
                 </div>
@@ -472,13 +504,12 @@
                 <div class="section">
                     <h3 class="section-title"><i class="fas fa-graduation-cap"></i> 教育背景</h3>
                     <div class="timeline-item">
-                        <div class="timeline-date">2012.09 - 2016.06</div>
-                        <h4 class="timeline-title">计算机科学与技术 学士</h4>
-                        <div class="timeline-subtitle">清华大学 · 北京</div>
+                        <div class="timeline-date">在校期间</div>
+                        <h4 class="timeline-title">软件技术专业</h4>
+                        <div class="timeline-subtitle">湖南化工职业技术学院</div>
                         <div class="timeline-description">
-                            <p>主修课程：数据结构与算法、操作系统、计算机网络、Web前端技术、软件工程</p>
-                            <p>获得校级优秀毕业生、国家奖学金等荣誉</p>
-                            <p>GPA: 3.8/4.0 (专业排名前5%)</p>
+                            <p>GPA: 3.5/4.0</p>
+                            <p>主修课程：C#程序设计、Unity游戏开发、数据结构与算法、软件工程</p>
                         </div>
                     </div>
                 </div>
@@ -486,23 +517,37 @@
                 <!-- 项目经验 -->
                 <div class="section">
                     <h3 class="section-title"><i class="fas fa-project-diagram"></i> 项目经验</h3>
+                    
                     <div class="timeline-item">
-                        <div class="timeline-date">2022.05 - 2022.11</div>
-                        <h4 class="timeline-title">电商数据可视化平台</h4>
+                        <div class="timeline-date">2024.08</div>
+                        <h4 class="timeline-title">星际征途</h4>
                         <div class="timeline-description">
-                            <p>项目描述：开发一个用于展示电商业务数据的可视化平台，支持多维度数据分析。</p>
-                            <p>技术栈：React + TypeScript + ECharts + Ant Design</p>
-                            <p>项目成果：提高数据分析效率50%，获得部门创新奖。</p>
+                            <p><strong>技术架构：</strong>Unity + Q Framework（MVC框架）</p>
+                            <p><strong>负责模块：</strong>寻路系统，枪械系统，关卡生成系统，战斗系统（随机物品掉落、Boss不同机制）</p>
+                            <div class="project-highlights">
+                                <p><strong>项目亮点：</strong></p>
+                                <div class="highlight-item">通过快速定义不同房间类型，创建动态网格数据存储每个房间及房间坐标，使用广度优先遍历算法寻找创建房间，在生成房间过程中采用预测的方式避免了房间生成死路。</div>
+                                <div class="highlight-item">通过AStar寻路算法进行获取敌人移动路径。</div>
+                                <div class="highlight-item">通过组合模式的设计模式将枪械特性进行组装实现枪械系统。</div>
+                                <div class="highlight-item">使用FSM状态机进行战斗系统的开发。</div>
+                            </div>
                         </div>
                     </div>
                     
                     <div class="timeline-item">
-                        <div class="timeline-date">2021.03 - 2021.09</div>
-                        <h4 class="timeline-title">企业级组件库开发</h4>
+                        <div class="timeline-date">2024.07 - 2024.08</div>
+                        <h4 class="timeline-title">The Story of Shennong</h4>
                         <div class="timeline-description">
-                            <p>项目描述：设计并实现一套企业级UI组件库，统一公司产品设计规范。</p>
-                            <p>技术栈：Vue 3 + Vite + Storybook + Jest</p>
-                            <p>项目成果：覆盖公司80%的前端项目，减少重复开发工作量。</p>
+                            <p><strong>技术架构：</strong>Unity + Q Framework（MVC框架）</p>
+                            <p><strong>负责模块：</strong>任务系统，角色控制，场景互动</p>
+                            <div class="project-highlights">
+                                <p><strong>项目亮点：</strong></p>
+                                <div class="highlight-item">使用框架中的IOC容器对系统功能进行解耦，不同的数据在各自的系统中进行初始化，对外提供接口进行系统功能的调用。</div>
+                                <div class="highlight-item">使用对象池技术优化了嵌入数据过于庞大导致的性能卡顿情况。</div>
+                                <div class="highlight-item">使用ScriptableObject填写对话数据和放置人物模型以及对话的展示动作。</div>
+                                <div class="highlight-item">通过AB包进行加载对话数据进而由UI进行相对应的展示，RawImage进行渲染展示人物模型。</div>
+                                <div class="highlight-item">编写场景控制器通过异步加载方式进行场景跳转。</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -514,21 +559,132 @@
             <button class="btn btn-print" onclick="window.print()">
                 <i class="fas fa-print"></i> 打印简历
             </button>
-            <button class="btn btn-download" onclick="downloadResume()">
-                <i class="fas fa-download"></i> 下载简历
+            <button class="btn btn-download" onclick="downloadResumeAsPDF()">
+                <i class="fas fa-download"></i> 下载简历(PDF)
             </button>
         </div>
     </div>
     
     <script>
-        // 下载简历功能
-        function downloadResume() {
-            alert("在实际应用中，这里可以连接后端生成PDF简历文件进行下载。\n\n当前为演示版本，您可以使用浏览器的打印功能保存为PDF。");
+        // 下载简历为PDF功能（单页版本）
+        async function downloadResumeAsPDF() {
+            try {
+                // 显示加载提示
+                showLoading();
+                
+                // 获取简历容器
+                const resumeContainer = document.querySelector('.resume-container');
+                
+                // 使用html2canvas将简历转换为canvas，调整分辨率
+                const canvas = await html2canvas(resumeContainer, {
+                    scale: 1.5, // 适当的分辨率
+                    useCORS: true, // 允许跨域图片
+                    backgroundColor: '#ffffff', // 设置白色背景
+                    logging: false // 关闭日志
+                });
+                
+                // 创建PDF对象（A4纸张尺寸：210mm x 297mm）
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                
+                // 获取PDF页面尺寸
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                
+                // 计算缩放比例，使内容适配A4页面
+                const imgWidth = pdfWidth - 20; // 左右各留10mm边距
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                // 检查高度是否超过页面高度，如果超过则按高度缩放
+                let finalWidth, finalHeight;
+                if (imgHeight > pdfHeight - 20) {
+                    // 按高度缩放
+                    finalHeight = pdfHeight - 20;
+                    finalWidth = (canvas.width * finalHeight) / canvas.height;
+                } else {
+                    // 按宽度缩放
+                    finalWidth = imgWidth;
+                    finalHeight = imgHeight;
+                }
+                
+                // 计算居中位置
+                const x = (pdfWidth - finalWidth) / 2;
+                const y = (pdfHeight - finalHeight) / 2;
+                
+                // 将canvas转换为图片数据
+                const imgData = canvas.toDataURL('image/jpeg', 0.9);
+                
+                // 将图片添加到PDF（居中，一页）
+                pdf.addImage(imgData, 'JPEG', x, y, finalWidth, finalHeight);
+                
+                // 保存PDF文件
+                pdf.save('刘绍力-Unity客户端开发工程师简历.pdf');
+                
+                // 隐藏加载提示
+                hideLoading();
+                
+            } catch (error) {
+                console.error('生成PDF时出错:', error);
+                hideLoading();
+                alert('生成PDF时出现错误，请重试或使用打印功能。');
+            }
+        }
+        
+        // 显示加载提示
+        function showLoading() {
+            // 创建加载提示元素
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.className = 'loading-overlay';
+            loadingOverlay.id = 'loadingOverlay';
+            
+            // 创建加载动画
+            const spinner = document.createElement('div');
+            spinner.className = 'spinner';
+            
+            // 创建加载文本
+            const loadingText = document.createElement('div');
+            loadingText.textContent = '正在生成PDF，请稍候...';
+            
+            // 组装加载提示
+            loadingOverlay.appendChild(spinner);
+            loadingOverlay.appendChild(loadingText);
+            
+            // 添加到页面
+            document.body.appendChild(loadingOverlay);
+            
+            // 禁用下载按钮，防止重复点击
+            const downloadBtn = document.querySelector('.btn-download');
+            downloadBtn.disabled = true;
+            downloadBtn.style.opacity = '0.7';
+            downloadBtn.style.cursor = 'not-allowed';
+        }
+        
+        // 隐藏加载提示
+        function hideLoading() {
+            // 移除加载提示元素
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            if (loadingOverlay) {
+                loadingOverlay.remove();
+            }
+            
+            // 重新启用下载按钮
+            const downloadBtn = document.querySelector('.btn-download');
+            downloadBtn.disabled = false;
+            downloadBtn.style.opacity = '1';
+            downloadBtn.style.cursor = 'pointer';
         }
         
         // 打印提示
         window.addEventListener('beforeprint', function() {
             document.querySelector('.actions').classList.add('no-print');
+        });
+        
+        // 添加键盘快捷键支持：Ctrl+S或Cmd+S保存为PDF
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault(); // 阻止浏览器默认保存行为
+                downloadResumeAsPDF();
+            }
         });
     </script>
 </body>
